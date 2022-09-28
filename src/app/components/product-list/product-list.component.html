@@ -11,7 +11,7 @@
                             <h1>{{ tempProduct.name }}</h1>
                         <!--</a>-->
                         <div class="price">{{ tempProduct.unitPrice | currency:'EUR' }}</div>
-                        <a href="#" class="primary-btn">Add to cart</a>
+                        <button (click)="addToCart(tempProduct)" class="btn btn-primary btn-sm">Add to cart</button>
                     </div>
                 </div>
                 <div *ngIf="products?.length == 0" class="alert alert-warning col-md-12" role="alert">
@@ -31,8 +31,8 @@
                             <div class="col-md-3 mt-2" style="text-align: right;">
                                 <span class="mr-2">Page size </span>
                                 <select #pageSelect (change)="updatePageSize(pageSelect.value)">
-                                    <option selected="true">5</option>
-                                    <option>10</option>
+                                    <option>5</option>
+                                    <option selected="true">10</option>
                                     <option>20</option>
                                     <option>50</option>
                                 </select>

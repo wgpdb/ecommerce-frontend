@@ -15,7 +15,7 @@ export class ProductListComponent implements OnInit {
   previousCategoryId: number = 1;
   searchMode: boolean = false;
   pageNumber: number = 1;
-  pageSize: number = 5;
+  pageSize: number = 10;
   totalElements: number = 0;
   previousKeyword: string = "";
 
@@ -80,5 +80,9 @@ export class ProductListComponent implements OnInit {
       this.pageSize = data.page.size;
       this.totalElements = data.page.totalElements;
     };
+  }
+
+  addToCart(product: Product) {
+    
   }
 }
