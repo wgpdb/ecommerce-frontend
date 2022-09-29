@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Country } from 'src/app/common/country';
 import { State } from 'src/app/common/state';
 import { FormService } from 'src/app/services/form.service';
+import { FormValidators } from 'src/app/validators/form-validators';
 
 @Component({
   selector: 'app-checkout',
@@ -25,9 +26,10 @@ export class CheckoutComponent implements OnInit {
   ngOnInit(): void {
     this.checkoutFormGroup = this.formBuilder.group({
       customer: this.formBuilder.group({
-        firstName: [''],
-        lastName: [''],
-        email: ['']
+        firstName: new FormControl('', [Validators.required, Validators.minLength(2), FormValidators.notOnlyWhitespace]),
+        lastName: new FormControl('', [Validators.required, Validators.minLength(2), FormValidators.notOnlyWhitespace]),
+        email: new FormControl('', [Validators.required, Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9._]+\\.[a-z]{2,4}$'), 
+                              FormValidators.notOnlyWhitespace])
       }),
       shippingAddress: this.formBuilder.group({
         street: [''],
@@ -44,7 +46,7 @@ export class CheckoutComponent implements OnInit {
         country: ['']
       }),
       creditCard: this.formBuilder.group({
-        cartType: [''],
+        cardType: [''],
         nameOnCard: [''],
         cardNumber: [''],
         securityCode: [''],
@@ -74,6 +76,10 @@ export class CheckoutComponent implements OnInit {
     );
   }
 
+  get firstName() { return this.checkoutFormGroup.get('customer.firstName'); }
+  get lastName() { return this.checkoutFormGroup.get('customer.lastName'); }
+  get email() { return this.checkoutFormGroup.get('customer.email'); }
+
   copyShippingAddressToBillingAddress(event: { target: { checked: any; }; }) {
     if (event.target.checked) {
       this.checkoutFormGroup.controls['billingAddress']
@@ -86,6 +92,9 @@ export class CheckoutComponent implements OnInit {
   }
 
   onSubmit() {
+    if (this.checkoutFormGroup.invalid) {
+      this.checkoutFormGroup.markAllAsTouched();
+    }
   }
 
   handleMonthsAndYears() {
